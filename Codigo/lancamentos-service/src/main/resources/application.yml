@@ -1,0 +1,40 @@
+server:
+  port: 8081
+  shutdown: graceful
+spring:
+  application:
+    name: lancamentos-service
+  mvc:
+    format:
+      date: iso
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5433/lancamentos}
+    username: ${DB_USER:lancamentos}
+    password: ${DB_PASSWORD:lancamentos}
+    hikari:
+      maximum-pool-size: 20
+      connection-timeout: 3000
+  rabbitmq:
+    host: ${RABBIT_HOST:localhost}
+    port: ${RABBIT_PORT:5672}
+    username: ${RABBIT_USER:guest}
+    password: ${RABBIT_PASSWORD:guest}
+    publisher-confirm-type: simple
+    connection-timeout: 3s
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,prometheus
+  health:
+    # A saúde do serviço não pode depender do broker (RNF01).
+    rabbit:
+      enabled: false
+app:
+  outbox:
+    intervalo-ms: 500
+    lote: 100
+  security:
+    # Com issuer-uri preenchido, valida via OIDC. Vazio, usa HS256 com a chave local.
+    issuer-uri: ${JWT_ISSUER_URI:}
+    chave-local: ${JWT_CHAVE_LOCAL:chave-somente-para-desenvolvimento-local-32b}

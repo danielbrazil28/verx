@@ -1,0 +1,57 @@
+server:
+  port: 8082
+  shutdown: graceful
+spring:
+  application:
+    name: consolidado-service
+  mvc:
+    format:
+      date: iso
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5434/consolidado}
+    username: ${DB_USER:consolidado}
+    password: ${DB_PASSWORD:consolidado}
+    hikari:
+      maximum-pool-size: 20
+      connection-timeout: 3000
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      timeout: 200ms
+      connect-timeout: 200ms
+  rabbitmq:
+    host: ${RABBIT_HOST:localhost}
+    port: ${RABBIT_PORT:5672}
+    username: ${RABBIT_USER:guest}
+    password: ${RABBIT_PASSWORD:guest}
+    listener:
+      simple:
+        concurrency: 2
+        max-concurrency: 8
+        # A mensagem só é confirmada depois que o método retorna, ou seja, após o commit.
+        acknowledge-mode: auto
+        default-requeue-rejected: false
+        retry:
+          enabled: true
+          max-attempts: 5
+          initial-interval: 500ms
+          multiplier: 2
+          max-interval: 5s
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,prometheus
+  health:
+    # Redis e broker não podem derrubar as consultas.
+    redis:
+      enabled: false
+    rabbit:
+      enabled: false
+app:
+  cache:
+    ttl-segundos: 300
+  security:
+    issuer-uri: ${JWT_ISSUER_URI:}
+    chave-local: ${JWT_CHAVE_LOCAL:chave-somente-para-desenvolvimento-local-32b}

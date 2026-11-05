@@ -6,7 +6,7 @@
 O sistema precisa de entrega durável, retry e DLQ, com baixa complexidade e execução local simples. Não há, por enquanto, necessidade de replay longo nem de muitos consumidores independentes.
 
 ## Decisão
-Usar RabbitMQ com exchange do tipo topic, quorum queue, publisher confirms, ack manual e DLQ. Na AWS, a opção é o Amazon MQ for RabbitMQ.
+Usar RabbitMQ com exchange do tipo topic, quorum queue, publisher confirms, confirmação da mensagem só após o commit e DLQ. Na AWS, a opção é o Amazon MQ for RabbitMQ.
 
 ## Alternativas
 | Opção | Motivo para não escolher |

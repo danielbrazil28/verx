@@ -6,7 +6,7 @@
 Dados financeiros de um comerciante não podem ser expostos a outro. Identidade é uma capacidade genérica e não deve ser construída do zero.
 
 ## Decisão
-- Delegar a autenticação a um provedor OIDC: Keycloak no ambiente local e, no alvo, um serviço gerenciado.
+- Delegar a autenticação a um provedor OIDC no alvo (Keycloak ou serviço gerenciado). Localmente, para simplificar, os tokens vêm de um emissor de desenvolvimento com chave HS256, ativo só no perfil `local`.
 - Validar assinatura, emissor, audiência e validade do JWT em cada serviço.
 - Usar os escopos `lancamentos:write`, `lancamentos:read` e `consolidado:read`.
 - Obter o `comercianteId` apenas do token e aplicá-lo em todas as consultas.
@@ -24,5 +24,5 @@ Dados financeiros de um comerciante não podem ser expostos a outro. Identidade 
 
 ## Consequências
 - O isolamento fica claro e pode ser testado.
-- Adiciona um componente ao ambiente local.
+- O provedor OIDC é um componente a mais no ambiente alvo.
 - mTLS entre serviços fica como evolução, pois eles não fazem chamadas síncronas entre si.
